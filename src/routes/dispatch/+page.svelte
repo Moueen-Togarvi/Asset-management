@@ -95,7 +95,7 @@
                                 /></svg
                             >
                         </span>
-                        Auto-Allocate (FIFO)
+                        <span class="btn-text">Auto-Allocate (FIFO)</span>
                     </button>
                 </div>
             </form>
@@ -673,28 +673,52 @@
             justify-content: space-between;
             align-items: center;
             gap: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: nowrap; /* Prevent wrapping */
         }
         .board-controls {
             width: auto;
             flex-grow: 0;
             display: flex;
             justify-content: flex-end;
+            padding: 0.25rem 0.5rem; /* Compact padding */
+            border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border for definition */
         }
         .control-group {
-            gap: 0.35rem;
+            gap: 0.5rem;
             align-items: center;
+            width: 100%;
+        }
+        .control-group label {
+            display: none; /* Hide label on mobile to save space */
+        }
+        .control-group input {
+            width: 50px;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            height: 32px;
         }
         .auto-alloc-btn {
-            padding: 6px 10px;
+            padding: 0 8px;
             font-size: 0.75rem;
+            height: 32px;
+            white-space: nowrap;
+        }
+        .auto-alloc-btn .btn-text {
+            display: none;
+        }
+        .auto-alloc-btn::after {
+            content: "Allocate";
         }
         .header-text h2 {
             font-size: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .header-text p {
-            display: none; /* Hide subtitle on mobile for extreme compact height */
+            display: none;
         }
     }
 
@@ -704,11 +728,11 @@
             min-width: 145px;
         }
         .board-header {
-            padding: 0.75rem;
+            padding: 0.5rem;
         }
-        .control-group label {
-            font-size: 0.7rem;
-            white-space: nowrap;
+        .header-text h2 {
+            font-size: 0.9rem; /* Even smaller on tiny screens */
+            max-width: 120px; /* Allow truncation */
         }
     }
 </style>
