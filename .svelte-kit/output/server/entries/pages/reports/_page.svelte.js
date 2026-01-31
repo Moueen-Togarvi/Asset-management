@@ -1,0 +1,7 @@
+import "clsx";
+function _page($$renderer) {
+  $$renderer.push(`<div class="reports-container animate-fade-in svelte-2pp8mk"><div class="placeholder-card glass-card svelte-2pp8mk"><div class="icon svelte-2pp8mk">📊</div> <h2 class="svelte-2pp8mk">Reports Module</h2> <p class="svelte-2pp8mk">Historical data analytics and PDF export features coming soon.</p> <div class="progress-bar svelte-2pp8mk"><div class="progress-fill svelte-2pp8mk"></div></div></div></div>`);
+}
+export {
+  _page as default
+};

@@ -1,0 +1,9 @@
+{
+	"/": [
+		"src/routes/+page.server.ts"
+	],
+	"/dispatch": [
+		"src/routes/dispatch/+page.server.ts"
+	],
+	"/reports": []
+}
