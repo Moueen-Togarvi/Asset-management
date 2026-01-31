@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, integer, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, integer, timestamp, pgEnum, index } from "drizzle-orm/pg-core";
 
 export const assetStatusEnum = pgEnum("asset_status", [
     "Available",
@@ -31,6 +31,11 @@ export const lots = pgTable("lots", {
     imageUrl: text("image_url"),
     status: assetStatusEnum("status").notNull().default("Available"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => {
+    return {
+        lotStatusIdx: index("lot_status_idx").on(table.status),
+        lotCreatedIdx: index("lot_created_idx").on(table.createdAt),
+    };
 });
 
 export const salesOrders = pgTable("sales_orders", {
@@ -49,4 +54,9 @@ export const allocations = pgTable("allocations", {
     allocationNumber: text("allocation_number").notNull().unique(),
     step: allocationStepEnum("step").notNull().default("Allocated"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => {
+    return {
+        allocStepIdx: index("alloc_step_idx").on(table.step),
+        allocCreatedIdx: index("alloc_created_idx").on(table.createdAt),
+    };
 });
