@@ -475,48 +475,48 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <!-- Mobile Navigation Arrows -->
-    <div class="mobile-nav-controls">
-        <button
-            class="nav-arrow left"
-            onclick={() => scrollTable("left")}
-            aria-label="Scroll Left"
-        >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-chevron-left"
-                ><path d="m15 18-6-6 6-6" /></svg
+        <!-- Mobile Navigation Arrows (Inside Table Section) -->
+        <div class="mobile-nav-controls">
+            <button
+                class="nav-arrow left"
+                onclick={() => scrollTable("left")}
+                aria-label="Scroll Left"
             >
-        </button>
-        <button
-            class="nav-arrow right"
-            onclick={() => scrollTable("right")}
-            aria-label="Scroll Right"
-        >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-chevron-right"
-                ><path d="m9 18 6-6-6-6" /></svg
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-chevron-left"
+                    ><path d="m15 18-6-6 6-6" /></svg
+                >
+            </button>
+            <button
+                class="nav-arrow right"
+                onclick={() => scrollTable("right")}
+                aria-label="Scroll Right"
             >
-        </button>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-chevron-right"
+                    ><path d="m9 18 6-6-6-6" /></svg
+                >
+            </button>
+        </div>
     </div>
 </div>
 
@@ -862,6 +862,7 @@
         min-width: 180px;
         align-self: flex-end;
         margin-top: 0.5rem;
+        justify-content: center;
     }
 
     .legend-item {
@@ -901,8 +902,60 @@
 
     @media (max-width: 768px) {
         .stats-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(3, 1fr); /* Force 3 columns */
+            gap: 0.5rem; /* Tighter gap */
         }
+        .stat-card {
+            padding: 0.5rem 0.25rem;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0;
+            position: relative;
+            min-height: 80px;
+            justify-content: flex-start; /* Move text to top */
+            padding-top: 0.75rem;
+        }
+        .stat-info {
+            align-items: center;
+            gap: 0.1rem;
+            width: 100%;
+        }
+        .stat-label {
+            font-size: 0.55rem; /* Even smaller to fit */
+            line-height: 1;
+            white-space: nowrap; /* Force single line */
+            color: #0f172a;
+            font-weight: 800;
+            letter-spacing: -0.5px; /* Squeeze text */
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis; /* Just in case */
+        }
+        .stat-value {
+            font-size: 1.25rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+            z-index: 2;
+        }
+        .stat-icon-wrapper {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 20px; /* Smaller */
+            height: 20px;
+            margin: 0;
+            opacity: 0.8;
+            background: transparent; /* Remove bg to be cleaner in corner */
+        }
+        .stat-icon-wrapper :global(svg) {
+            width: 14px; /* Keep icon visible */
+            height: 14px;
+        }
+        /* Re-order for column layout: Icon top ?? Or keep side by side but smaller? 
+           User said "aik line mn teno ko lao". Column flex inside card is safest for narrow width.
+        */
+
         .donut-chart-wrapper {
             flex-direction: column;
             gap: 1rem;
@@ -1144,20 +1197,24 @@
     }
 
     /* Mobile Nav Controls */
+    .table-section {
+        position: relative; /* Context for arrows */
+    }
+
     .mobile-nav-controls {
         display: none; /* Hidden on desktop by default */
-        position: fixed;
-        bottom: 2rem;
+        position: absolute;
+        bottom: 0.5rem; /* Move down slightly */
         right: 1rem;
         gap: 0.5rem;
-        z-index: 50;
+        z-index: 10;
     }
 
     .nav-arrow {
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        background: #0f172a;
+        background: rgba(15, 23, 42, 0.85); /* Reduced bg opacity */
         color: white;
         display: flex;
         align-items: center;

@@ -773,7 +773,7 @@
             content: "Allocate";
         }
         .header-text h2 {
-            font-size: 1rem;
+            font-size: 0.85rem; /* Smaller to show full text */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
