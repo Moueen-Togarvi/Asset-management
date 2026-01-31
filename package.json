@@ -23,6 +23,7 @@
 	"dependencies": {
 		"@auth/sveltekit": "^1.11.1",
 		"@neondatabase/serverless": "^1.0.2",
+		"date-fns": "^4.1.0",
 		"drizzle-orm": "^0.45.1",
 		"lucide-svelte": "^0.563.0"
 	}
