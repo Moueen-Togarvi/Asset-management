@@ -5,6 +5,17 @@
 
     let { data } = $props();
 
+    let tableWrapper: HTMLElement;
+
+    function scrollTable(direction: "left" | "right") {
+        if (!tableWrapper) return;
+        const scrollAmount = 300;
+        tableWrapper.scrollBy({
+            left: direction === "right" ? scrollAmount : -scrollAmount,
+            behavior: "smooth",
+        });
+    }
+
     const STATUS_DISPLAY: Record<string, string> = {
         On_Hold: "On Hold",
         Dispatched: "Out",
@@ -358,7 +369,7 @@
                 Refresh
             </button>
         </div>
-        <div class="table-wrapper">
+        <div class="table-wrapper" bind:this={tableWrapper}>
             <table>
                 <thead>
                     <tr>
@@ -464,6 +475,48 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- Mobile Navigation Arrows -->
+    <div class="mobile-nav-controls">
+        <button
+            class="nav-arrow left"
+            onclick={() => scrollTable("left")}
+            aria-label="Scroll Left"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-left"
+                ><path d="m15 18-6-6 6-6" /></svg
+            >
+        </button>
+        <button
+            class="nav-arrow right"
+            onclick={() => scrollTable("right")}
+            aria-label="Scroll Right"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-right"
+                ><path d="m9 18 6-6-6-6" /></svg
+            >
+        </button>
     </div>
 </div>
 
@@ -1088,5 +1141,47 @@
     .delete-confirm-btn:hover {
         filter: brightness(1.1);
         transform: scale(1.02);
+    }
+
+    /* Mobile Nav Controls */
+    .mobile-nav-controls {
+        display: none; /* Hidden on desktop by default */
+        position: fixed;
+        bottom: 2rem;
+        right: 1rem;
+        gap: 0.5rem;
+        z-index: 50;
+    }
+
+    .nav-arrow {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #0f172a;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        opacity: 0.9;
+        transition:
+            transform 0.2s ease,
+            opacity 0.2s;
+    }
+
+    .nav-arrow:active {
+        transform: scale(0.95);
+    }
+    .nav-arrow:hover {
+        opacity: 1;
+        background: black;
+    }
+
+    @media (max-width: 1024px) {
+        .mobile-nav-controls {
+            display: flex; /* Show on tablets and mobile */
+        }
     }
 </style>

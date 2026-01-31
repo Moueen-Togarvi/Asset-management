@@ -43,7 +43,7 @@
         }
 
         return [
-            { id: 1, title: "1. Racks (Available)", items: groups.Available },
+            { id: 1, title: "1. Racks\n(Available)", items: groups.Available },
             { id: 2, title: "2. Allocated", items: groups.Allocated },
             { id: 3, title: "3. Picked", items: groups.Picked },
             { id: 4, title: "4. On Hold", items: groups.On_Hold },
@@ -525,8 +525,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 0.75rem;
+        padding: 0.5rem 0.75rem;
         margin-bottom: 0.5rem;
+        min-height: 3.5rem; /* Ensure consistent height for alignment */
+        align-items: flex-start; /* Align to top to handle wrapping */
     }
 
     .column-title {
@@ -535,6 +537,8 @@
         color: #000000;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+        line-height: 1.2;
+        max-width: 80%; /* Prevent overlapping with badge */
     }
 
     .badge {
