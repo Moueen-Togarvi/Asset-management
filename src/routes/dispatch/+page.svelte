@@ -3,6 +3,17 @@
     import { toastStore } from "$lib/toasts.svelte";
     let { data } = $props();
     let orderQty = $state(1);
+    let boardContainer: HTMLElement;
+
+    // Scroll Logic
+    function scrollBoard(direction: "left" | "right") {
+        if (!boardContainer) return;
+        const scrollAmount = 300; // Approx card width + gap
+        boardContainer.scrollBy({
+            left: direction === "right" ? scrollAmount : -scrollAmount,
+            behavior: "smooth",
+        });
+    }
 
     let optimisticUpdates = $state(new Map<string, string>());
 
@@ -102,7 +113,7 @@
         </div>
     </header>
 
-    <div class="kanban-board">
+    <div class="kanban-board" bind:this={boardContainer}>
         {#each processedColumns as column}
             <div class="column-wrapper">
                 <div class="column-header">
@@ -396,6 +407,48 @@
             </div>
         {/each}
     </div>
+
+    <!-- Mobile Navigation Arrows -->
+    <div class="mobile-nav-controls">
+        <button
+            class="nav-arrow left"
+            onclick={() => scrollBoard("left")}
+            aria-label="Scroll Left"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-left"
+                ><path d="m15 18-6-6 6-6" /></svg
+            >
+        </button>
+        <button
+            class="nav-arrow right"
+            onclick={() => scrollBoard("right")}
+            aria-label="Scroll Right"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-right"
+                ><path d="m9 18 6-6-6-6" /></svg
+            >
+        </button>
+    </div>
 </div>
 
 <style>
@@ -454,6 +507,10 @@
         gap: 1rem;
         min-height: 70vh;
         width: 100%;
+        overflow-x: auto;
+        padding-bottom: 1rem; /* Spacing for scrollbar/arrows */
+        scroll-behavior: smooth;
+        position: relative;
     }
 
     .column-wrapper {
@@ -733,6 +790,48 @@
         .header-text h2 {
             font-size: 0.9rem; /* Even smaller on tiny screens */
             max-width: 120px; /* Allow truncation */
+        }
+    }
+
+    /* Mobile Nav Controls */
+    .mobile-nav-controls {
+        display: none; /* Hidden on desktop by default */
+        position: fixed;
+        bottom: 2rem;
+        right: 1rem;
+        gap: 0.5rem;
+        z-index: 50;
+    }
+
+    .nav-arrow {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #0f172a;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        opacity: 0.9;
+        transition:
+            transform 0.2s ease,
+            opacity 0.2s;
+    }
+
+    .nav-arrow:active {
+        transform: scale(0.95);
+    }
+    .nav-arrow:hover {
+        opacity: 1;
+        background: black;
+    }
+
+    @media (max-width: 1024px) {
+        .mobile-nav-controls {
+            display: flex; /* Show on tablets and mobile */
         }
     }
 </style>
