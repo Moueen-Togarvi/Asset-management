@@ -281,7 +281,13 @@
 			display: none;
 		}
 		.user-profile {
-			display: none;
+			display: block; /* Show Sign In on mobile */
+		}
+		.user-profile .premium-btn {
+			padding: 6px 12px; /* Smaller button */
+			font-size: 0.75rem;
+			gap: 4px;
+			white-space: nowrap;
 		}
 	}
 
