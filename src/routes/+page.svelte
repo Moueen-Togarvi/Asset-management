@@ -765,7 +765,7 @@
         width: 100%;
         padding: 0.75rem 1rem 0.75rem 2.8rem;
         border-radius: var(--radius-md);
-        border: 1px solid rgba(0, 0, 0, 0.15); /* Increased contrast */
+        border: 1px solid #000000;
         background: rgba(255, 255, 255, 0.8);
         transition: var(--transition);
         font-size: 0.95rem;
@@ -773,8 +773,8 @@
     }
 
     .input-group input::placeholder {
-        color: #94a3b8; /* Decreased contrast */
-        opacity: 0.7;
+        color: #64748b; /* Slate 500 - High Contrast */
+        opacity: 1;
     }
 
     .input-wrapper {
@@ -927,7 +927,7 @@
     th {
         text-align: left;
         padding: 1rem;
-        color: var(--text-muted);
+        color: #000000;
         font-size: 0.7rem;
         font-weight: 700;
         text-transform: uppercase;
@@ -938,7 +938,7 @@
 
     td {
         padding: 1rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.04); /* Low contrast border */
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2); /* Higher contrast border */
         color: var(--text-main);
         font-size: 0.9rem;
     }

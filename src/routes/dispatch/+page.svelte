@@ -416,8 +416,9 @@
         color: var(--text-main);
     }
     .header-text p {
-        color: var(--text-muted);
+        color: #334155;
         font-size: 0.875rem;
+        font-weight: 500;
     }
 
     .board-controls {
@@ -436,7 +437,7 @@
         width: 60px;
         padding: 6px 10px;
         border-radius: 8px;
-        border: 1px solid var(--glass-border);
+        border: 1px solid #000000;
         background: white;
     }
 
@@ -474,7 +475,7 @@
     .column-title {
         font-size: 0.85rem;
         font-weight: 800;
-        color: #1e293b;
+        color: #000000;
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
@@ -489,7 +490,7 @@
         border-radius: 50%;
         font-size: 0.75rem;
         font-weight: 800;
-        color: #475569;
+        color: #0f172a;
         border: 1px solid #e2e8f0;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
@@ -509,7 +510,7 @@
         padding: 0.5rem 0.65rem;
         border-radius: 8px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-        border: 1px solid rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.25);
         display: flex;
         flex-direction: column;
         gap: 0.2rem;
@@ -523,11 +524,11 @@
 
     .item-id {
         font-weight: 700;
-        color: #1e293b;
+        color: #000000;
         font-size: 0.8rem;
     }
     .item-desc {
-        color: var(--text-muted);
+        color: #334155;
         font-size: 0.75rem;
         white-space: nowrap;
         overflow: hidden;
@@ -536,7 +537,7 @@
 
     .alloc-badge {
         background: #f8fafc;
-        color: #475569;
+        color: #0f172a;
         font-family: inherit;
         font-weight: 800;
         font-size: 0.65rem;

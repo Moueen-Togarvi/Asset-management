@@ -11,10 +11,10 @@
   --error: #ef4444;
   --bg-main: #fcfdfe;
   --bg-glass: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-border: rgba(0, 0, 0, 0.3);
   --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
   --text-main: #0f172a;
-  --text-muted: #64748b;
+  --text-muted: #334155;
   --radius-lg: 20px;
   --radius-md: 12px;
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
@@ -45,7 +45,7 @@ h3,
 h4 {
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: #1e293b;
+  color: #0f172a;
 }
 
 button {
