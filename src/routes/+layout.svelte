@@ -2,7 +2,10 @@
 	import "../app.css";
 	import { toastStore } from "$lib/toasts.svelte";
 	import { navigating } from "$app/state";
-	let { children } = $props();
+	import type { LayoutData } from './$types';
+	
+	let { children, data }: { children: any; data: LayoutData } = $props();
+	let session = $derived(data.session);
 </script>
 
 {#if navigating}
@@ -41,8 +44,14 @@
 			<a href="/reports" class="nav-link">Reports</a>
 		</div>
 		<div class="user-profile">
-			<!-- Placeholder for Auth -->
-			<button class="premium-btn premium-btn-primary">Sign In</button>
+			{#if session?.user}
+				<span class="user-name">{session.user.name || session.user.email}</span>
+				<form method="POST" action="/api/auth/signout" style="display: inline;">
+					<button type="submit" class="premium-btn premium-btn-secondary">Sign Out</button>
+				</form>
+			{:else}
+				<a href="/login" class="premium-btn premium-btn-primary">Sign In</a>
+			{/if}
 		</div>
 	</nav>
 

@@ -3,15 +3,18 @@ import { lots, salesOrders, allocations } from './db/schema';
 import { desc, asc, eq, sql, and, ne, or, gt } from 'drizzle-orm';
 import { subHours } from 'date-fns';
 
-export async function addAsset(data: { lotNumber: string, description: string, quantity: number, location: string }) {
+export async function addAsset(data: { lotNumber: string, description: string, quantity: number, location: string, userId: string }) {
     return await db.insert(lots).values(data).returning();
 }
 
-export async function getRecentInventory(limit: number = 10) {
-    return await db.select().from(lots).orderBy(desc(lots.createdAt)).limit(limit);
+export async function getRecentInventory(userId: string, limit: number = 10) {
+    return await db.select().from(lots)
+        .where(eq(lots.userId, userId))
+        .orderBy(desc(lots.createdAt))
+        .limit(limit);
 }
 
-export async function getDashboardStats() {
+export async function getDashboardStats(userId: string) {
     const [res] = await db.select({
         total: sql<number>`count(*)`,
         available: sql<number>`count(*) filter (where ${lots.status} = 'Available')`,
@@ -21,7 +24,8 @@ export async function getDashboardStats() {
         Picked: sql<number>`count(*) filter (where ${lots.status} = 'Picked')`,
         On_Hold: sql<number>`count(*) filter (where ${lots.status} = 'On_Hold')`,
         Dispatched: sql<number>`count(*) filter (where ${lots.status} = 'Dispatched')`
-    }).from(lots);
+    }).from(lots)
+        .where(eq(lots.userId, userId));
 
     return {
         totalAssets: Number(res.total),
@@ -35,13 +39,13 @@ export async function getDashboardStats() {
     };
 }
 
-export async function getFIFOAvailable() {
+export async function getFIFOAvailable(userId: string) {
     return await db.select().from(lots)
-        .where(eq(lots.status, 'Available'))
+        .where(and(eq(lots.status, 'Available'), eq(lots.userId, userId)))
         .orderBy(asc(lots.createdAt));
 }
 
-export async function getAvailableLots(limit: number = 50) {
+export async function getAvailableLots(userId: string, limit: number = 50) {
     return await db.select({
         id: lots.id,
         lotNumber: lots.lotNumber,
@@ -49,12 +53,12 @@ export async function getAvailableLots(limit: number = 50) {
         status: lots.status
     })
         .from(lots)
-        .where(eq(lots.status, 'Available'))
+        .where(and(eq(lots.status, 'Available'), eq(lots.userId, userId)))
         .orderBy(desc(lots.createdAt))
         .limit(limit);
 }
 
-export async function getActiveAllocations(limit: number = 100) {
+export async function getActiveAllocations(userId: string, limit: number = 100) {
     const fourHoursAgo = subHours(new Date(), 4);
 
     return await db.select({
@@ -72,11 +76,14 @@ export async function getActiveAllocations(limit: number = 100) {
         .from(allocations)
         .innerJoin(lots, eq(allocations.lotId, lots.id))
         .where(
-            or(
-                ne(allocations.step, 'Dispatched'),
-                and(
-                    eq(allocations.step, 'Dispatched'),
-                    gt(allocations.createdAt, fourHoursAgo)
+            and(
+                eq(lots.userId, userId),
+                or(
+                    ne(allocations.step, 'Dispatched'),
+                    and(
+                        eq(allocations.step, 'Dispatched'),
+                        gt(allocations.createdAt, fourHoursAgo)
+                    )
                 )
             )
         )
@@ -102,7 +109,18 @@ export async function createAllocation(orderId: string, lotId: string, quantity:
     return allocation;
 }
 
-export async function updateAllocationStep(allocationId: string, step: 'Allocated' | 'Picked' | 'On_Hold' | 'Dispatched') {
+export async function updateAllocationStep(allocationId: string, step: 'Allocated' | 'Picked' | 'On_Hold' | 'Dispatched', userId: string) {
+    // First verify the allocation belongs to the user
+    const [existingAllocation] = await db.select()
+        .from(allocations)
+        .innerJoin(lots, eq(allocations.lotId, lots.id))
+        .where(and(eq(allocations.id, allocationId), eq(lots.userId, userId)))
+        .limit(1);
+
+    if (!existingAllocation) {
+        throw new Error('Allocation not found or unauthorized');
+    }
+
     const [allocation] = await db.update(allocations)
         .set({ step })
         .where(eq(allocations.id, allocationId))
@@ -116,13 +134,23 @@ export async function updateAllocationStep(allocationId: string, step: 'Allocate
     return allocation;
 }
 
-export async function deleteAsset(id: string) {
-    return await db.delete(lots).where(eq(lots.id, id));
+export async function deleteAsset(id: string, userId: string) {
+    return await db.delete(lots).where(and(eq(lots.id, id), eq(lots.userId, userId)));
 }
 
-export async function returnAsset(allocationId: string) {
-    const [allocation] = await db.select().from(allocations).where(eq(allocations.id, allocationId));
-    if (!allocation) return null;
+export async function returnAsset(allocationId: string, userId: string) {
+    // First verify the allocation belongs to the user
+    const [result] = await db.select()
+        .from(allocations)
+        .innerJoin(lots, eq(allocations.lotId, lots.id))
+        .where(and(eq(allocations.id, allocationId), eq(lots.userId, userId)))
+        .limit(1);
+
+    if (!result) {
+        throw new Error('Allocation not found or unauthorized');
+    }
+
+    const allocation = result.allocations;
 
     // 1. Reset lot status
     await db.update(lots)
